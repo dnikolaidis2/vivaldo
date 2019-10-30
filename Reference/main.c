@@ -77,20 +77,71 @@ int main(int argc, char ** argv)
 		data1[i] = t+d;
 	}
 
-	dataType_t * data2 = (dataType_t *)malloc(sizeof(dataType_t)*dim*size);
-	assert(data2!=NULL);
+	/****************************************/
+	/* Part 1: Reference Software Execution */
+	/****************************************/
+
+	dataType_t * data2_sw = (dataType_t *)malloc(sizeof(dataType_t)*dim*size);
+	assert(data2_sw!=NULL);
 
 	printf("Calling myFunc... ");
 	fflush(stdout);
 
-	myFunc (size, dim, threshold, data0, data1, data2);
+	/* timing */
+	double totalTime_sw=0.0;
+	struct timespec timerStart_sw;
+	struct timespec timerStop_sw;
+
+	clock_gettime(CLOCK_REALTIME, &timerStart_sw);
+
+	myFunc (size, dim, threshold, data0, data1, data2_sw);
+
+	clock_gettime(CLOCK_REALTIME, &timerStop_sw);
+	totalTime_sw = (timerStop_sw.tv_sec-timerStart_sw.tv_sec)+ (timerStop_sw.tv_nsec-timerStart_sw.tv_nsec) / BILLION;
 
 	printf("DONE\n");
+	printf("Software execution time: %f\n", totalTime_sw);
 	fflush(stdout);
+
+	/******************************/
+	/* Part 2: Hardware Execution */
+	/******************************/
+
+	dataType_t * data2_hw = (dataType_t *)malloc(sizeof(dataType_t)*dim*size);
+	assert(data2_hw!=NULL);
+
+	printf("Calling myFuncAccel... ");
+	fflush(stdout);
+
+	/* timing */
+	double totalTime_hw=0.0;
+	struct timespec timerStart_hw;
+	struct timespec timerStop_hw;
+
+	clock_gettime(CLOCK_REALTIME, &timerStart_hw);
+
+	myFunc (size, dim, threshold, data0, data1, data2_hw);
+
+	clock_gettime(CLOCK_REALTIME, &timerStop_hw);
+	totalTime_hw = (timerStop_hw.tv_sec-timerStart_hw.tv_sec)+ (timerStop_hw.tv_nsec-timerStart_hw.tv_nsec) / BILLION;
+
+	printf("DONE\n");
+	printf("Hardware execution time: %f\n", totalTime_hw);
+	fflush(stdout);
+
+	/******************************/
+	/* Part 3: Output validation  */
+	/******************************/
+
+	for (int i = 0; i < dim*size; ++i)
+	{
+		assert(data2_sw[i] == data2_hw[i]);
+	}
 
 	free(data0);
 	free(data1);
-	free(data2);	
+	free(data2_sw);
+	free(data2_hw);
 
 	return 0;
 }
