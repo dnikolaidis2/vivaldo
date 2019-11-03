@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 
 vivaldo:
 	$(CC) -o vivaldo main.c myIP.c
