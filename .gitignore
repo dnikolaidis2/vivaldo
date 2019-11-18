@@ -1,2 +1,22 @@
 
 Reference/vivaldo
+
+*.log
+
+*.app
+
+HLS/solution2/
+
+.vscode/
+
+HLS/.vivado_hls_log_all.xml
+
+HLS/.project
+
+HLS/.cproject
+
+HLS/.settings/
+
+HLS/solution1/
+
+HLS/.apc/

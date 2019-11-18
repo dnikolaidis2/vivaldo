@@ -1,0 +1,66 @@
+#include "myLib.h"
+
+void myFuncAccel (unsigned int size, unsigned int dim, dataType_t threshold, dataType_t * data0, dataType_t * data1, dataType_t * data2)
+{
+#pragma HLS INTERFACE ap_bus depth=16 port=data0 // 5. For simulation only
+#pragma HLS INTERFACE ap_bus depth=400 port=data1
+#pragma HLS INTERFACE ap_bus depth=400 port=data2
+
+	unsigned int i, k, l;
+
+	int cur_size = 100;
+	int cur_dim = 4;
+	dataType_t cur_threshold = 0.1;
+
+
+	for ( i = 0 ; i < cur_size ; i ++ )
+	{
+#pragma HLS loop_tripcount min=100 max=100 avg=100
+		// 1.
+		// for ( k = 0 ; k < cur_dim ; k ++ )
+		// {
+		// 	data2 [ i*cur_dim + k ] = 0.0 ;
+		// }
+
+		// 3.
+		int r = 1;
+		for ( k = 0; r && ( k < cur_dim ); k ++ )
+		// for ( k = 0 ; k < cur_dim ; k ++ )
+		{
+#pragma HLS loop_tripcount min=4 max=4 avg=4
+			// 2.
+			dataType_t tmp = 0.0;
+			// 1.
+			// data2 [ i*cur_dim + k ] = 0.0 ;
+
+			for ( l = 0 ; l < cur_dim ; l ++ )
+			{
+#pragma HLS loop_tripcount min=4 max=4 avg=4
+				// 2.
+				// data2 [ i*cur_dim + k ] += data0 [ k * cur_dim + l ] * data1 [ i*cur_dim+ l ];
+				tmp += data0 [k * cur_dim + l] * data1 [i*cur_dim+ l];
+			}
+			// 3.
+			r = (tmp > cur_threshold);
+			// 2.
+			data2 [i*cur_dim + k] = tmp;
+		}
+		
+		// 3.
+// 		int r = 1 ;
+// 		for ( l = 0 ; r && ( l < cur_dim ) ; l ++ )
+// 		{
+// #pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
+// 			r = ( data2 [ i*cur_dim + l ] > cur_threshold ) ;
+// 		}
+
+		if ( r )
+		{
+			for ( l = 0 ; l < cur_dim ; l ++ )
+			{
+#pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
+				data2 [i*cur_dim + l] = 0.0;
+			}
+		}
+	}
+}

@@ -120,7 +120,7 @@ int main(int argc, char ** argv)
 
 	clock_gettime(CLOCK_REALTIME, &timerStart_hw);
 
-	myFunc (size, dim, threshold, data0, data1, data2_hw);
+	myFuncAccel (size, dim, threshold, data0, data1, data2_hw);
 
 	clock_gettime(CLOCK_REALTIME, &timerStop_hw);
 	totalTime_hw = (timerStop_hw.tv_sec-timerStart_hw.tv_sec)+ (timerStop_hw.tv_nsec-timerStart_hw.tv_nsec) / BILLION;
