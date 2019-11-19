@@ -31,7 +31,6 @@ void myFuncAccel (unsigned int size, unsigned int dim, dataType_t threshold, dat
 		}
 
 		int r = 1;
-#pragma HLS dependence variable=r intra false
 		for ( k = 0 ; k < CUR_DIM ; k ++ )
 		{
 #pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
