@@ -21,19 +21,25 @@ void myFuncAccel (unsigned int size, unsigned int dim, dataType_t threshold, dat
 
 	for ( i = 0 ; i < CUR_SIZE ; i ++ )
 	{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 #pragma HLS loop_tripcount min=1000 max=1000 avg=1000
+		dataType_t data1_cache [4];
+		for (k = 0; k<CUR_DIM; k++)
+		{
+#pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
+			data1_cache[k] = data1[i*CUR_DIM+k];
+		}
+
 		int r = 1;
 #pragma HLS dependence variable=r intra false
 		for ( k = 0 ; k < CUR_DIM ; k ++ )
 		{
-//#pragma HLS PIPELINE rewind
 #pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
 			dataType_t acc = 0.0;
 			for ( l = 0 ; l < CUR_DIM ; l ++ )
 			{
 #pragma HLS LOOP_TRIPCOUNT min=4 max=4 avg=4
-				acc += data0_cache [ k * CUR_DIM + l ] * data1 [ i*CUR_DIM+ l ];
+				acc += data0_cache [k * CUR_DIM + l] * data1_cache[l];
 			}
 			r = ( acc > threshold ) && r;
 			data2_tmp [ k ] = acc;
