@@ -20,3 +20,15 @@ HLS/.settings/
 HLS/solution1/
 
 HLS/.apc/
+
+HLS_16dim/.apc/
+
+HLS_16dim/.settings/
+
+HLS_16dim/solution1/
+
+HLS_16dim/.cproject
+
+HLS_16dim/.project
+
+HLS_16dim/.vivado_hls_log_all.xml
