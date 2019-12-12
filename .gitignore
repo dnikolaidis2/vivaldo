@@ -32,3 +32,20 @@ HLS_16dim/.cproject
 HLS_16dim/.project
 
 HLS_16dim/.vivado_hls_log_all.xml
+
+.metadata
+
+RemoteSystemsTempFiles
+Vivaldo_system
+SDK.log
+
+Vivaldo/.cproject
+Vivaldo/.project
+Vivaldo/project.sdx
+Vivaldo/Debug/
+Vivaldo/Release/
+Vivaldo/Estimation/
+Vivaldo/_sdx/
+ip_cache/
+webtalk/
+

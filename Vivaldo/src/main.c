@@ -16,9 +16,9 @@ void myFunc (unsigned int size, unsigned int dim, dataType_t threshold, dataType
 			for ( l = 0 ; l < dim ; l ++ )
 			{
 				data2 [ i*dim + k ] += data0 [ k * dim + l ] * data1 [ i*dim+ l ];
-			}			
+			}
 		}
-		
+
 		int r = 1 ;
 
 		for ( l = 0 ; r && ( l < dim ) ; l ++ )
@@ -57,7 +57,7 @@ int main(int argc, char ** argv)
 	printf("Seed %u\nSize %u\nDimension %u\nThreshold %f\n", seed, size, dim, threshold);
 	fflush(stdout);	
 
-	dataType_t * data0 = (dataType_t *)malloc(sizeof(dataType_t)*dim*dim);
+	dataType_t * data0 = (dataType_t *)sds_alloc(sizeof(dataType_t)*dim*dim);
 	assert(data0!=NULL);
 
 	for(i=0;i<dim*dim;i++)
@@ -67,7 +67,7 @@ int main(int argc, char ** argv)
 		data0[i] = t+d;
 	}
 	
-	dataType_t * data1 = (dataType_t *)malloc(sizeof(dataType_t)*dim*size);
+	dataType_t * data1 = (dataType_t *)sds_alloc(sizeof(dataType_t)*dim*size);
 	assert(data1!=NULL);
 
 	for(i=0;i<dim*size;i++)
@@ -107,7 +107,7 @@ int main(int argc, char ** argv)
 	/* Part 2: Hardware Execution */
 	/******************************/
 
-	dataType_t * data2_hw = (dataType_t *)malloc(sizeof(dataType_t)*dim*size);
+	dataType_t * data2_hw = (dataType_t *)sds_alloc(sizeof(dataType_t)*dim*size);
 	assert(data2_hw!=NULL);
 
 	printf("Calling myFuncAccel... ");
@@ -120,7 +120,9 @@ int main(int argc, char ** argv)
 
 	clock_gettime(CLOCK_REALTIME, &timerStart_hw);
 
+#pragma SDS resource(1)
 	myFuncAccel (size/2, dim, threshold, data0, data1, data2_hw);
+#pragma SDS resource(2)
 	myFuncAccel (size/2, dim, threshold, data0, data1 + ((size*dim)/2), data2_hw + ((size*dim)/2));
 
 	clock_gettime(CLOCK_REALTIME, &timerStop_hw);
@@ -134,7 +136,7 @@ int main(int argc, char ** argv)
 	/* Part 3: Output validation  */
 	/******************************/
 
-	for (int i = 0; i < dim*size; ++i)
+	for (i = 0; i < dim*size; ++i)
 	{
 		assert(data2_sw[i] == data2_hw[i]);
 	}
