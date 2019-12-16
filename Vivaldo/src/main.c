@@ -120,10 +120,17 @@ int main(int argc, char ** argv)
 
 	clock_gettime(CLOCK_REALTIME, &timerStart_hw);
 
+	// myFuncAccel (size, dim, threshold, data0, data1, data2_hw);
+
+#pragma	SDS async(1)
 #pragma SDS resource(1)
 	myFuncAccel (size/2, dim, threshold, data0, data1, data2_hw);
+#pragma	SDS async(2)
 #pragma SDS resource(2)
 	myFuncAccel (size/2, dim, threshold, data0, data1 + ((size*dim)/2), data2_hw + ((size*dim)/2));
+
+#pragma SDS wait(1)
+#pragma SDS wait(2)
 
 	clock_gettime(CLOCK_REALTIME, &timerStop_hw);
 	totalTime_hw = (timerStop_hw.tv_sec-timerStart_hw.tv_sec)+ (timerStop_hw.tv_nsec-timerStart_hw.tv_nsec) / BILLION;
@@ -141,10 +148,11 @@ int main(int argc, char ** argv)
 		assert(data2_sw[i] == data2_hw[i]);
 	}
 
-	free(data0);
-	free(data1);
+	sds_free(data0);
+	sds_free(data1);
 	free(data2_sw);
-	free(data2_hw);
+	sds_free(data2_hw);
 
+	printf("DONE!!\n");
 	return 0;
 }

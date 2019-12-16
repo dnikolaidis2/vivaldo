@@ -2,10 +2,13 @@
 
 #pragma SDS data zero_copy(data0[0:dim*dim])
 #pragma SDS data access_pattern(data0:SEQUENTIAL)
+#pragma SDS data mem_attribute(data0:PHYSICAL_CONTIGUOUS)
 #pragma SDS data zero_copy(data1[0:dim*size])
 #pragma SDS data access_pattern(data1:SEQUENTIAL)
+#pragma SDS data mem_attribute(data1:PHYSICAL_CONTIGUOUS)
 #pragma SDS data zero_copy(data2[0:dim*size])
 #pragma SDS data access_pattern(data2:SEQUENTIAL)
+#pragma SDS data mem_attribute(data2:PHYSICAL_CONTIGUOUS)
 void myFuncAccel (unsigned int size, unsigned int dim, dataType_t threshold, dataType_t * data0, dataType_t * data1, dataType_t * data2)
 {
 	unsigned int CUR_DIM = 4;
