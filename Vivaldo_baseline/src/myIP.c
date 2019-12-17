@@ -1,10 +1,14 @@
 #include "myLib.h"
 
-#pragma SDS data copy(data0[0:dim*dim], data1[0:dim*size], data2[0:dim*size])
-#pragma SDS data access_pattern(data0:SEQUENTIAL, data1:SEQUENTIAL, data2:SEQUENTIAL)
-#pragma SDS data mem_attribute(data0:PHYSICAL_CONTIGUOUS, data1:PHYSICAL_CONTIGUOUS, data2:PHYSICAL_CONTIGUOUS)
-#pragma SDS data data_mover(data0:FASTDMA, data1:FASTDMA, data2:FASTDMA)
-#pragma SDS data sys_port(data0:ps7_S_AXI_HP0, data1:ps7_S_AXI_HP0, data2:ps7_S_AXI_HP0)
+#pragma SDS data copy(data0[0:dim*dim])
+#pragma SDS data access_pattern(data0:SEQUENTIAL)
+#pragma SDS data mem_attribute(data0:PHYSICAL_CONTIGUOUS)
+#pragma SDS data copy(data1[0:dim*size])
+#pragma SDS data access_pattern(data1:SEQUENTIAL)
+#pragma SDS data mem_attribute(data1:PHYSICAL_CONTIGUOUS)
+#pragma SDS data copy(data2[0:dim*size])
+#pragma SDS data access_pattern(data2:SEQUENTIAL)
+#pragma SDS data mem_attribute(data2:PHYSICAL_CONTIGUOUS)
 void myFuncAccel (unsigned int size, unsigned int dim, dataType_t threshold, dataType_t * data0, dataType_t * data1, dataType_t * data2)
 {
 	unsigned int CUR_DIM = 4;
